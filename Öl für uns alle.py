@@ -9,6 +9,7 @@ from pygame.locals import *
 
 # Initializing
 pg.init()
+
 pg.mixer.init()
 
 clock = pg.time.Clock()
