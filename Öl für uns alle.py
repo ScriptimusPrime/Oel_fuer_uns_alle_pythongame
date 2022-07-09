@@ -503,7 +503,7 @@ class Spieler:
             ok = False
             while not ok:  # erst wenn eine freie Quelle gefunden und vergeben wurde, dann ok
                 if init:
-                    qnr = random.randint(1, 9)
+                    qnr = random.randint(10, 14)
                 else:
                     qnr = random.randint(1, 18)
                 if not Oelquelle.quelle_vergeben[qnr]:

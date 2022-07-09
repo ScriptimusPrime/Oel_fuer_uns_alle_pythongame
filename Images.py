@@ -31,7 +31,7 @@ buttonImages = (image.load("Bedienfeld/plus.png"), image.load("Bedienfeld/minus.
                 image.load("Bedienfeld/button_oelquelle-kaufen.png"),
                 Landbutton_small[0], Landbutton_small[1], Landbutton_small[2], Landbutton_small[3], Landbutton_small[4],
                 image.load("Bedienfeld/button_close.png"),
-                image.load("Titelbild/1spieler.png"), image.load("Titelbild/2spieler.png"), image.load("Titelbild/3spieler.png"), image.load("Titelbild/4spieler.png"),image.load('Bedienfeld/unchecked-d.png'))
+                image.load("Titelbild/1spieler.png"), image.load("Titelbild/2spieler.png"), image.load("Titelbild/3spieler.png"), image.load("Titelbild/4spieler.png"),image.load('Bedienfeld/unchecked-d.png'),image.load("Bedienfeld/button_anleitung.png"))
 
 buttonKlick = image.load("Bedienfeld/button_klick.png")
 
@@ -43,3 +43,4 @@ wuerfelimages = (image.load("Bedienfeld/Würfel/1.png"), image.load("Bedienfeld/
 
 endeImage = image.load("Spielende/Bohrturm Nacht.png")
 blendeImage = image.load("Spielende/blende.png")
+anleitungImage = (image.load("Anleitung/Anleitung1.png"),image.load("Anleitung/Anleitung2.png"))

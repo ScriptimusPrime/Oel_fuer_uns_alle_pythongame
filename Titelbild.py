@@ -22,12 +22,15 @@ class Titelbild:
         for i in range(4):
             self.button.append(Button(16 + i, 1, 1, x + i * (250 + d), y, True, USEREVENT + 19 + i))
         self.button.append(Button(BUTTON_EINFACH,1,1,x+300,y+300,True,BUTTON_EINFACH_PRESSED))
+        self.button.append(Button(BUTTON_ANLEITUNG,1,1,197,y+353,True,BUTTON_ANLEITUNG_PRESSED))
 
-    def draw(self, alpha, wahl=False):
+    def draw(self, alpha, wahl=False, anleitung=0):
         self.screen.fill(COLOR[BLACK])
         self.screen.blit(self.bild, ((1920 - self.bildrect.width) / 2, (1080 - self.bildrect.height) / 2))
+        if anleitung>0:
+            self.screen.blit(anleitungImage[anleitung-1],(260,25))
         if wahl:
-            for i in range(5):
+            for i in range(6):
                 self.button[i].draw(self.screen)
         self.blende.set_alpha(alpha)
         self.screen.blit(self.blende, (0, 0))
@@ -45,7 +48,7 @@ class Titelbild:
         mp = False
         sanz = 0
         while not fertig:
-            self.draw(0, True)
+            self.draw(0, True,0)
             # Mausklicks abfragen
             for event in pg.event.get():
                 for i in range(4):
@@ -56,6 +59,10 @@ class Titelbild:
 
                 if event.type == BUTTON_EINFACH_PRESSED:
                     self.switcheinfachcheckstate()
+
+                if event.type == BUTTON_ANLEITUNG_PRESSED:
+                    self.zeigeanleitung()
+                    mp = False
 
                 if event.type == MOUSEBUTTONUP:
                     mp = False
@@ -72,10 +79,16 @@ class Titelbild:
             self.draw(alpha)
 
     def checkselection(self):
-        for i in range(5):
+        for i in range(6):
             self.button[i].checkselection()
 
     def switcheinfachcheckstate(self):
         self.einfach = not self.einfach
         self.button[4].switchcheckstate(self.einfach)
+
+    def zeigeanleitung(self):
+        self.draw(0, False, 1)
+        warteaufklick(self.screen)
+        self.draw(0, False, 2)
+        warteaufklick(self.screen)
 
