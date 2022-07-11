@@ -31,18 +31,21 @@ def spielzuende(spieler, game):
     # denn auch die anderen Spieler können durch eine Dividendenausschüttung die
     # Obergrenze erreicht haben
     for i in range(len(spieler)):
+        # wenn ein neuer Spieler bankrott gegangen ist, wird dies mitgeteilt und er als ausgeschieden markiert
         if spieler[i].istbankrott() and not spieler[i].ausgeschieden:
             playsound(verloren[i], False)
             spieler[i].scheidetaus()
+            # wenn es insgesamt nur einen Spieler gab, ist das Spiel damit zuende
             if game.anzahlspieler == 1:
                 playsound(zuende, False)
                 return True
 
-
+        # wenn einer der Spieler das Spielziel erreicht hat
         if spieler[i].hatzehnmillionen():
             playsound(gewonnen[i], False)
             return True
 
+    # Zähle durch, ob alle bis auf einen Spieler ausgeschieden sind und merke den noch übrigen Spieler
     rauscount=0
     nochda = -1
     for i in range(len(spieler)):
@@ -51,10 +54,12 @@ def spielzuende(spieler, game):
         else:
             nochda = i
 
+    # wenn alle bis auf einen Spieler ausgeschieden sind und dieser nicht schon die ganze Zeit alleine spielte, ist das Spiel zuende
     if game.anzahlspieler > 1 and rauscount == len(spieler)-1:
         playsound(letzter[nochda], False)
         return True
 
+    # Wenn nichts davon zutrifft, ist das Spiel noch nicht zuende
     return False
 
 
