@@ -297,7 +297,7 @@ class Spieler:
         self.bohrpos = 0
         self.figur_aufbohrloch = False
         self.figur_aufspielfeld = True
-        self.geld = 1000000
+        self.geld = 10000
         self.oelquellen = []
         self.tankschiffaktien = 0
         self.raffinerieaktien = 0
@@ -318,6 +318,7 @@ class Spieler:
         self.wurf = 0
         self.kannbeenden = False
         self.zahlungsunfaehig = False
+        self.ausgeschieden = False
 
     def gesamtvermoegen(self):
         vermoegen = self.geld
@@ -330,6 +331,9 @@ class Spieler:
 
     def istbankrott(self):
         return self.zahlungsunfaehig
+
+    def scheidetaus(self):
+        self.ausgeschieden=True
 
     def hatzehnmillionen(self):
         return self.gesamtvermoegen() >= 10000000
@@ -1100,9 +1104,10 @@ def drawallelements(sp=True, co=True, flip=True):
         spielfeld.drawfrachtrate()
 
         for sp in spieler:
-            sp.draw()
-            for tkr in sp.tanker:
-                tkr.draw()
+            if not sp.ausgeschieden:
+                sp.draw()
+                for tkr in sp.tanker:
+                    tkr.draw()
     if co:
         console.draw()
     if flip:
@@ -1183,13 +1188,20 @@ def main():
                 if event.type == BUTTON_ZUGBEENDEN_PRESSED:
                     if zuggestartet:
                         zugbeendet = True
-                        if spielzuende(spieler):
+                        if spielzuende(spieler, game):
                             spielende.show()
                             spiellaeuft = False
 
                         zuggestartet = False
-                        spieler[game.aktspieler].setzealleszurueck()
-                        anderreihe = (anderreihe + 1) % game.anzahlspieler
+                        gefunden = False
+                        spielaus = False
+                        while not gefunden and not spielaus:  # nächsten Spieler an der Reihe suchen
+                            anderreihe = (anderreihe + 1) % game.anzahlspieler
+                            if not spieler[anderreihe].ausgeschieden:
+                                gefunden = True     # nächster Spieler wurde gefunden
+                                spieler[game.aktspieler].setzealleszurueck()
+                            if not gefunden and anderreihe == game.aktspieler: # niemanden gefunden --> alle Spieler sind vorzeitig bankrott
+                                spielaus = True  # Spiel ist aus
 
                 if event.type == BUTTON_PROBEBOHRUNG_PRESSED:
                     spieler[game.aktspieler].bohrungdurchfuehren()

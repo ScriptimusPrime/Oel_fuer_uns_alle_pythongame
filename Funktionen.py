@@ -26,17 +26,35 @@ def warteaufklick(screen):
                 done = True
 
 
-def spielzuende(spieler):
+def spielzuende(spieler, game):
     # Die Abfrage muss nach jedem Beenden eines Spielzugs über alle Spieler laufen,
     # denn auch die anderen Spieler können durch eine Dividendenausschüttung die
     # Obergrenze erreicht haben
     for i in range(len(spieler)):
-        if spieler[i].istbankrott():
+        if spieler[i].istbankrott() and not spieler[i].ausgeschieden:
             playsound(verloren[i], False)
-            return True
+            spieler[i].scheidetaus()
+            if game.anzahlspieler == 1:
+                playsound(zuende, False)
+                return True
+
+
         if spieler[i].hatzehnmillionen():
             playsound(gewonnen[i], False)
             return True
+
+    rauscount=0
+    nochda = -1
+    for i in range(len(spieler)):
+        if spieler[i].ausgeschieden:
+            rauscount += 1
+        else:
+            nochda = i
+
+    if game.anzahlspieler > 1 and rauscount == len(spieler)-1:
+        playsound(letzter[nochda], False)
+        return True
+
     return False
 
 
