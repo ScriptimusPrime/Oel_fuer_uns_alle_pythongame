@@ -297,7 +297,7 @@ class Spieler:
         self.bohrpos = 0
         self.figur_aufbohrloch = False
         self.figur_aufspielfeld = True
-        self.geld = 10000
+        self.geld = 1000000
         self.oelquellen = []
         self.tankschiffaktien = 0
         self.raffinerieaktien = 0

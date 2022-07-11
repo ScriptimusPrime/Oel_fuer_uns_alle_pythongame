@@ -19,7 +19,6 @@ class Game:
     def setzeanzahlspielerundModus(self, wert):
         self.anzahlspieler = wert[0]
         self.einfach = wert[1]
-        print("Anzahlspieler",wert[0],"  Einfach=",wert[1])
 
     def sperresuezkanal(self, modus):
         self.suezkanalgesperrt = modus
