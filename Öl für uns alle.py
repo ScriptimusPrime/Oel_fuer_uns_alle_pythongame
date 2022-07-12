@@ -66,7 +66,7 @@ class Tanker:
         self.starten()
 
     def waehleFrachtbrief(self):
-        print("Wähle Frachtbrief")
+        # print("Wähle Frachtbrief")
         gefunden = False
         frachtbrief = []
         while not gefunden:
@@ -75,7 +75,7 @@ class Tanker:
             if frachtbrief is not None:
                 self.kostengewinndiff = Gewinn[self.startland][self.zielhafenid][self.frachtmenge] * 1000
                 gefunden = True
-        print("Frachtbrief gefunden")
+        # print("Frachtbrief gefunden")
         for i in range(4):
             self.kosten.append(None)
             self.gewinn.append(None)
@@ -278,12 +278,10 @@ class Information:
 
 
 class Spieler:
-    def __init__(self, nummer, typ):
+    def __init__(self, nummer):
         self.nummer = nummer
-        self.typ = typ  # HUMAN oder COMPUTER
         self.bereich = ZOOMFULL
         self.bahn = AUSSENBAHN
-        # print('Spielertyp ', self.typ)
         self.imageorig = imgSpielfigur[nummer]
         self.image = pg.transform.scale(self.imageorig, (int(FIGURZOOMSCALE[self.bereich][game.zoommode] * self.imageorig.get_width()), int(FIGURZOOMSCALE[self.bereich][game.zoommode] * self.imageorig.get_height())))
         self.imagerect = self.image.get_rect()
@@ -362,17 +360,17 @@ class Spieler:
 
     def hatgenugoel(self, land):
         oelmenge = 0
-        print("Land=", land)
+        # print("Land=", land)
         for quelle in self.oelquellen:
             if quelle.hafen == land:
-                print("Quelle gefunden", quelle.hafen)
+                # print("Quelle gefunden", quelle.hafen)
                 oelmenge += quelle.tankstand
-        print("Deine Tanks in", hafentext[land], "enthalten insgesamt", oelmenge, "Tonnen Rohöl")
+        # print("Deine Tanks in", hafentext[land], "enthalten insgesamt", oelmenge, "Tonnen Rohöl")
         if oelmenge >= Minimumoel[land]:
-            print("Das sind mehr als", Minimumoel[land])
+            # print("Das sind mehr als", Minimumoel[land])
             return True
         else:
-            print("Das ist nicht genug öl. Minimum =", Minimumoel[land])
+            # print("Das ist nicht genug öl. Minimum =", Minimumoel[land])
             playsound(nichtgenugoel[land], False)
             return False
 
@@ -516,7 +514,8 @@ class Spieler:
             besitzkarte.zeigekarte(qnr)
             return qnr
         else:
-            print("Es sind bereits alle Ölquellen vergeben")
+            None
+            # print("Es sind bereits alle Ölquellen vergeben")
 
     def draw(self):
         breite = 0
@@ -598,11 +597,11 @@ class Spieler:
         drawallelements(True, True)
 
     def tankerstarten(self, landnr):
-        print("Tanker wird gestartet")
+        # print("Tanker wird gestartet")
         self.landauswahl = False
         self.tanker.append(Tanker(self, landnr))  # self.nummer
         self.tankeristunterwegs = True
-        print("Tanker ist unterwegs")
+        # print("Tanker ist unterwegs")
         drawallelements(True, False)
 
     def tankerbewegen(self):
@@ -1118,7 +1117,7 @@ def main():
     random.seed()
     # hier Spielinitialisierung
     for i in range(game.anzahlspieler):
-        spieler.append(Spieler(i, HUMAN))  # Test: nur ein menschlicher Spieler
+        spieler.append(Spieler(i))
         spieler[i].get_quelle(True)
 
     if game.iseinfach():
