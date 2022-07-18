@@ -12,6 +12,11 @@ class Game:
         self.anzahlspieler = 0
         self.rate = 1
         self.einfach = False
+        self.maxgeld = 10000000
+
+    def setmaxgeld(self,betrag):
+        self.maxgeld = betrag
+        print(f"Das Spielziel liegt jetzt bei {self.maxgeld} $")
 
     def changerate(self, newrate):
         self.rate = newrate

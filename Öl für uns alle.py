@@ -278,7 +278,8 @@ class Information:
 
 
 class Spieler:
-    def __init__(self, nummer):
+    def __init__(self, nummer, game):
+        self.game = game
         self.nummer = nummer
         self.bereich = ZOOMFULL
         self.bahn = AUSSENBAHN
@@ -334,7 +335,7 @@ class Spieler:
         self.ausgeschieden=True
 
     def hatzehnmillionen(self):
-        return self.gesamtvermoegen() >= 10000000
+        return self.gesamtvermoegen() >= self.game.maxgeld
 
     def tankmitgroesstermenge(self, land):
         tanknr = -1
@@ -875,8 +876,9 @@ class Spieler:
                 self.oelfoerderung()
             drawallelements(True, True)
         if feld == URLAUBSANFANG:
-            playsound(feld_sound[feld], False)
-            self.urlaubsanfang()
+            if game.anzahlspieler>1:
+                playsound(feld_sound[feld], False)
+                self.urlaubsanfang()
             drawallelements(True, False)
         if feld == BOERSE:
             playsound(feld_sound[feld], False)
@@ -899,8 +901,9 @@ class Spieler:
                     playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False)
             drawallelements(True, True)
         if feld == KONFERENZLONDON:
-            playsound(feld_sound[feld], False)
-            self.konferenz()
+            if game.anzahlspieler>1:
+                playsound(feld_sound[feld], False)
+                self.konferenz()
             drawallelements(True, False)
         if feld == ZURUECKZURBOERSE:
             if self.tankschiffaktien > 1 or self.raffinerieaktien > 1:
@@ -914,8 +917,9 @@ class Spieler:
             self.oelquelleversiegt()
             drawallelements(True, True)
         if feld == DIENSTREISESTART:
-            playsound(feld_sound[feld], False)
-            self.dienstreise()
+            if game.anzahlspieler>1:
+                playsound(feld_sound[feld], False)
+                self.dienstreise()
             drawallelements(True, False)
         if feld == ZURBOERSE:
             playsound(feld_sound[feld], False)
@@ -1117,7 +1121,7 @@ def main():
     random.seed()
     # hier Spielinitialisierung
     for i in range(game.anzahlspieler):
-        spieler.append(Spieler(i))
+        spieler.append(Spieler(i, game))
         spieler[i].get_quelle(True)
 
     if game.iseinfach():
@@ -1125,6 +1129,7 @@ def main():
         BOHRFELD[4]=1
         spielfeld.wechselezueinfachemFeld()
     mousepressed = False
+    xkeypressed = False
 
     # ab hier läuft das Spiel
     game.setzemode(SPIELRUN)
@@ -1219,6 +1224,16 @@ def main():
 
                 if event.type == MOUSEBUTTONUP:
                     mousepressed = False
+
+                gedrueckt = pg.key.get_pressed()
+                if gedrueckt[K_x]:  # P für Pause gedrückt?
+                    if not xkeypressed:  # wenn P vorher nicht gedrückt war
+                        xkeypressed = True  # Kenner setzen, dass p gedrückt ist
+                        game.setmaxgeld(100000000)
+                        playsound(mixer.Sound("Sounds/Mitteilungen/hundertmillionen.mp3"),False)
+
+                if not gedrueckt[K_x]:  # P nicht gedrückt
+                    xkeypressed = False  # Kenner setzen, dass p nicht gedrückt ist
 
             # Mausklicks abfragen
             pg.event.pump()
