@@ -84,12 +84,12 @@ class Tanker:
         self.player.bezahlen(self.kosten[game.rate - 1])
         self.player.reduzieretankstand(self.startland, Frachtmengen[self.frachtmenge])
         # Sprachausgabe "Du verschiffst x Tonnen Rohöl aus " + "Starthafen" . Das Ziel ist x . Deine Kosten betragen bei Frachtrate x " Betrag " Dollar
-        playsound(mixer.Sound("Sounds/Verschiffen/" + str(Frachtmengen[self.frachtmenge]) + ".mp3"), False)
-        playsound(mixer.Sound("Sounds/Verschiffen/" + hafentext[self.startland] + ".mp3"), False)
-        playsound(mixer.Sound("Sounds/Verschiffen/" + zieltext[self.zielhafen] + ".mp3"), False)
-        playsound(mixer.Sound("Sounds/Verschiffen/Kosten" + str(game.rate) + ".mp3"), False)
-        playsound(mixer.Sound("Sounds/Beträge/" + str(self.kosten[game.rate - 1]) + ".mp3"), False)
-        playsound(mixer.Sound("Sounds/Verschiffen/Dollar.mp3"), False)
+        playsound(mixer.Sound("Sounds/Verschiffen/" + str(Frachtmengen[self.frachtmenge]) + ".mp3"), False,game.quiet)
+        playsound(mixer.Sound("Sounds/Verschiffen/" + hafentext[self.startland] + ".mp3"), False,game.quiet)
+        playsound(mixer.Sound("Sounds/Verschiffen/" + zieltext[self.zielhafen] + ".mp3"), False,game.quiet)
+        playsound(mixer.Sound("Sounds/Verschiffen/Kosten" + str(game.rate) + ".mp3"), False,game.quiet)
+        playsound(mixer.Sound("Sounds/Beträge/" + str(self.kosten[game.rate - 1]) + ".mp3"), False,game.quiet)
+        playsound(mixer.Sound("Sounds/Verschiffen/Dollar.mp3"), False,game.quiet)
         drawallelements(False, True)
 
     def finderoute(self, startpos, zielhafen, strecke):
@@ -231,10 +231,10 @@ class Information:
 
         if typ == FRACHTRATE:
             game.changerate(wert)
-            playsound(frachtrate_sound[wert - 1], False)
+            playsound(frachtrate_sound[wert - 1], False,game.quiet)
         if typ == SUEZGESPERRT:
             game.sperresuezkanal(True)
-            playsound(suezkanalgesperrt, False)
+            playsound(suezkanalgesperrt, False,game.quiet)
             drawallelements(False, True)
             pg.display.flip()
         if typ == DIVIDENDEN:
@@ -243,12 +243,12 @@ class Information:
             if wert == 1:
                 raff = 10000
                 tank = 5000
-            playsound(dividenden_sound[wert], False)
+            playsound(dividenden_sound[wert], False,game.quiet)
 
             for sp in spieler:
                 sp.dividendenausschuettung(raff, tank)
         if typ == AKTIEN:
-            playsound(aktien_sound[wert], False)
+            playsound(aktien_sound[wert], False,game.quiet)
             for sp in spieler:
                 sp.aktienausschuettung(wert)
         drawallelements(False, True)
@@ -372,7 +372,7 @@ class Spieler:
             return True
         else:
             # print("Das ist nicht genug öl. Minimum =", Minimumoel[land])
-            playsound(nichtgenugoel[land], False)
+            playsound(nichtgenugoel[land], False,game.quiet)
             return False
 
     def setzealleszurueck(self):
@@ -433,7 +433,7 @@ class Spieler:
         self.kannbeenden = True
 
     def ziehezu(self, station, liste):
-        playsound(mixer.Sound("Sounds/Mitteilungen/reisestationweiter.mp3"), False)
+        playsound(mixer.Sound("Sounds/Mitteilungen/reisestationweiter.mp3"), False,game.quiet)
         steps = 20
         oldpos = liste[station - 1]
         newpos = liste[station]
@@ -556,10 +556,10 @@ class Spieler:
                 drawallelements(True)
                 if quelle.istankvoll() and not mitgeteilt:
                     mitgeteilt = True
-                    playsound(tank_voll_sound[quelle.hafen], False)
-                    playsound(verschiffen_sound, False)
+                    playsound(tank_voll_sound[quelle.hafen], False,game.quiet)
+                    playsound(verschiffen_sound, False,game.quiet)
         else:
-            playsound(foerderstop, False)
+            playsound(foerderstop, False,game.quiet)
 
     def aufschlussbohrung(self):
         self.probebohrung_preis = 140000
@@ -583,7 +583,7 @@ class Spieler:
         spielfeld.changezoommode(ZOOMBESITZKARTEN)
         self.bezahlen(200000)
         nr = self.get_quelle()
-        playsound(mixer.Sound("Sounds/Ölquelle/" + str(nr) + ".mp3"), False)
+        playsound(mixer.Sound("Sounds/Ölquelle/" + str(nr) + ".mp3"), False,game.quiet)
 
         spielfeld.changezoommode(ZOOMFULL)
         drawallelements(True, True)
@@ -594,7 +594,7 @@ class Spieler:
 
     def landauswaehlen(self, rate):
         self.landauswahl = True
-        playsound(esgiltfrachtrate[rate - 1], False)
+        playsound(esgiltfrachtrate[rate - 1], False,game.quiet)
         drawallelements(True, True)
 
     def tankerstarten(self, landnr):
@@ -614,10 +614,10 @@ class Spieler:
             # 2. alle tanker, die das ziel erreicht haben löschen
         for i in reversed(range(len(self.tanker))):
             if self.tanker[i].zielerreicht:
-                playsound(mixer.Sound("Sounds/Verschiffen/Ziel" + zieltext[self.tanker[i].zielhafen] + ".mp3"), False)
-                playsound(mixer.Sound("Sounds/Verschiffen/Gewinn" + str(game.rate) + ".mp3"), False)
-                playsound(mixer.Sound("Sounds/Beträge/" + str(self.tanker[i].gewinn[game.rate - 1]) + ".mp3"), False)
-                playsound(mixer.Sound("Sounds/Verschiffen/Dollar.mp3"), False)
+                playsound(mixer.Sound("Sounds/Verschiffen/Ziel" + zieltext[self.tanker[i].zielhafen] + ".mp3"), False,game.quiet)
+                playsound(mixer.Sound("Sounds/Verschiffen/Gewinn" + str(game.rate) + ".mp3"), False,game.quiet)
+                playsound(mixer.Sound("Sounds/Beträge/" + str(self.tanker[i].gewinn[game.rate - 1]) + ".mp3"), False,game.quiet)
+                playsound(mixer.Sound("Sounds/Verschiffen/Dollar.mp3"), False,game.quiet)
 
                 self.erhalten(self.tanker[i].gewinn[game.rate - 1])
                 self.tanker.remove(self.tanker[i])
@@ -634,7 +634,7 @@ class Spieler:
                 else:
                     versiegt = quelle
         if versiegt is not None:
-            playsound(mixer.Sound("Sounds/Ölquelle/versiegt/" + str(versiegt.nr) + ".mp3"), False)
+            playsound(mixer.Sound("Sounds/Ölquelle/versiegt/" + str(versiegt.nr) + ".mp3"), False,game.quiet)
             #versiegt.nimmquellezurueck()
             #game.nimmquellezurueck(versiegt.nr)
             self.oelquellen.remove(versiegt)
@@ -650,15 +650,15 @@ class Spieler:
         wert = karte[2]
         if typ == PROQUELLE:
             if self.oelquellen:  #if len(self.oelquellen) > 0:
-                playsound(mixer.Sound("Sounds/Mitteilungen/" + str(wert) + ".mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/" + str(wert) + ".mp3"), False,game.quiet)
                 for _ in self.oelquellen:
                     self.bezahlen(wert)
         if typ == RUECKVERGUETUNG:
-            playsound(mixer.Sound("Sounds/Mitteilungen/erhälst 40000.mp3"), False)
+            playsound(mixer.Sound("Sounds/Mitteilungen/erhälst 40000.mp3"), False,game.quiet)
             self.erhalten(wert)
         if typ == EINMALKOSTEN:
             if self.oelquellen:  #if len(self.oelquellen) > 0:
-                playsound(mixer.Sound("Sounds/Mitteilungen/" + str(wert) + ".mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/" + str(wert) + ".mp3"), False,game.quiet)
                 self.bezahlen(wert)
         if typ == HAFENKOSTEN:
             kuwaitgefunden = False
@@ -684,30 +684,30 @@ class Spieler:
                     irangefunden = True
                     irgendwasgefunden = True
             if irgendwasgefunden:
-                playsound(mixer.Sound("Sounds/Mitteilungen/du zahlst.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/du zahlst.mp3"), False,game.quiet)
 
             if kuwaitgefunden:
                 self.bezahlen(150000)
-                playsound(mixer.Sound("Sounds/Mitteilungen/150000 kuwait.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/150000 kuwait.mp3"), False,game.quiet)
             if irakgefunden:
                 self.bezahlen(50000)
-                playsound(mixer.Sound("Sounds/Mitteilungen/50000 irak.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/50000 irak.mp3"), False,game.quiet)
 
             if irangefunden:
                 self.bezahlen(30000)
-                playsound(mixer.Sound("Sounds/Mitteilungen/30000 iran.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/30000 iran.mp3"), False,game.quiet)
 
             if qatargefunden:
                 self.bezahlen(30000)
-                playsound(mixer.Sound("Sounds/Mitteilungen/30000 katar.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/30000 katar.mp3"), False,game.quiet)
 
             if trinidadgefunden:
                 self.bezahlen(30000)
-                playsound(mixer.Sound("Sounds/Mitteilungen/30000 trinidad.mp3"), False)
+                playsound(mixer.Sound("Sounds/Mitteilungen/30000 trinidad.mp3"), False,game.quiet)
 
         if typ == ZUHUBSCHRAUBER:
             # warteaufklick(screen)
-            playsound(mixer.Sound("Sounds/Mitteilungen/zuHubschrauber.mp3"), False)
+            playsound(mixer.Sound("Sounds/Mitteilungen/zuHubschrauber.mp3"), False,game.quiet)
             spielfeld.changezoommode(self.bereich)
             if self.pos < 12:  # Start bis Hubschrauber
                 self.zug(12 - self.pos)
@@ -723,7 +723,7 @@ class Spieler:
                 self.zug(12)
                 drawallelements(True, False)
         if typ == ZUOELFOERDERUNG:
-            playsound(mixer.Sound("Sounds/Mitteilungen/zuÖlförderung.mp3"), False)
+            playsound(mixer.Sound("Sounds/Mitteilungen/zuÖlförderung.mp3"), False,game.quiet)
             spielfeld.changezoommode(self.bereich)
             if self.pos < 5:  # vor dem unteren Feld
                 self.zug(5 - self.pos)
@@ -740,7 +740,7 @@ class Spieler:
                 self.zug(36 - self.pos)
                 self.zug(5)
         if typ == BOERSEHALBERPREIS:
-            playsound(mixer.Sound("Sounds/Mitteilungen/zur Börse Aktien halber Preis kaufen.mp3"), False)
+            playsound(mixer.Sound("Sounds/Mitteilungen/zur Börse Aktien halber Preis kaufen.mp3"), False,game.quiet)
             spielfeld.changezoommode(self.bereich)
             if self.pos < 10:
                 self.zug(10 - self.pos)
@@ -857,57 +857,57 @@ class Spieler:
         feld = FELD[self.pos]
 
         if feld == MEMO:
-            playsound(feld_sound[feld], False)
+            playsound(feld_sound[feld], False,game.quiet)
             self.memo()
         if feld == INFORMATION:
-            playsound(feld_sound[feld], False)
+            playsound(feld_sound[feld], False,game.quiet)
             self.information()
         if feld == AUFSCHLUSSBOHRUNG:
             if self.geld >=140000:
                 if Oelquelle.anzahl_quellen < 18:
-                    playsound(feld_sound[feld], False)
+                    playsound(feld_sound[feld], False,game.quiet)
                     self.aufschlussbohrung()
                 else:
-                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False)
+                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False,game.quiet)
             drawallelements(True, True)
         if feld == OELFOERDERUNG:
             if self.oelquellen:  #if len(self.oelquellen) > 0:
-                playsound(feld_sound[feld], False)
+                playsound(feld_sound[feld], False,game.quiet)
                 self.oelfoerderung()
             drawallelements(True, True)
         if feld == URLAUBSANFANG:
             if game.anzahlspieler>1:
-                playsound(feld_sound[feld], False)
+                playsound(feld_sound[feld], False,game.quiet)
                 self.urlaubsanfang()
             drawallelements(True, False)
         if feld == BOERSE:
-            playsound(feld_sound[feld], False)
+            playsound(feld_sound[feld], False,game.quiet)
             self.onboerse = True
             drawallelements(True, True)
         if feld == VERKAUFSANGEBOT:
             if self.geld >= 200000:
                 if Oelquelle.anzahl_quellen < 18:
-                    playsound(feld_sound[feld], False)
+                    playsound(feld_sound[feld], False,game.quiet)
                     self.verkaufsangebot()
                 else:
-                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False)
+                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False,game.quiet)
             drawallelements(True, True)
         if feld == HUBSCHRAUBER:
             if self.geld >= 40000:
                 if Oelquelle.anzahl_quellen < 18:
-                    playsound(feld_sound[feld], False)
+                    playsound(feld_sound[feld], False,game.quiet)
                     self.hubschrauber()
                 else:
-                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False)
+                    playsound(mixer.Sound("Sounds/Mitteilungen/keine Ölquellen verfügbar.mp3"), False,game.quiet)
             drawallelements(True, True)
         if feld == KONFERENZLONDON:
             if game.anzahlspieler>1:
-                playsound(feld_sound[feld], False)
+                playsound(feld_sound[feld], False,game.quiet)
                 self.konferenz()
             drawallelements(True, False)
         if feld == ZURUECKZURBOERSE:
             if self.tankschiffaktien > 1 or self.raffinerieaktien > 1:
-                playsound(feld_sound[feld], False)
+                playsound(feld_sound[feld], False,game.quiet)
                 self.zug(-4)
                 self.aktienverkaufen(EGAL, 2, ZWANGHALBERPREIS)
 
@@ -918,11 +918,11 @@ class Spieler:
             drawallelements(True, True)
         if feld == DIENSTREISESTART:
             if game.anzahlspieler>1:
-                playsound(feld_sound[feld], False)
+                playsound(feld_sound[feld], False,game.quiet)
                 self.dienstreise()
             drawallelements(True, False)
         if feld == ZURBOERSE:
-            playsound(feld_sound[feld], False)
+            playsound(feld_sound[feld], False,game.quiet)
             self.zug(1)
             self.zug(10)
             drawallelements(True, True)
@@ -931,7 +931,7 @@ class Spieler:
 
     def bohrfeld_auswerten(self):
         feld = BOHRFELD[self.bohrpos]
-        playsound(bohrfeld_sound[feld], False)
+        playsound(bohrfeld_sound[feld], False,game.quiet)
         if feld == GLATTERVERLAUF:
             self.bohrzug(4)
         if feld == NICHTFUENDIG:
@@ -942,7 +942,7 @@ class Spieler:
         if feld == FUENDIG:
             spielfeld.changezoommode(ZOOMBESITZKARTEN)
             nr = self.get_quelle()
-            playsound(mixer.Sound("Sounds/Ölquelle/" + str(nr) + ".mp3"), False)
+            playsound(mixer.Sound("Sounds/Ölquelle/" + str(nr) + ".mp3"), False,game.quiet)
 
             self.bereich = ZOOMFULL
             self.setzeaufspielfeld()
@@ -963,7 +963,7 @@ class Spieler:
         self.y = BohrFeldPos[self.bohrpos][1]
         self.figur_aufbohrloch = True
         self.figur_aufspielfeld = False
-        playsound(bohrfeld_sound[0], False)
+        playsound(bohrfeld_sound[0], False,game.quiet)
 
     def setzeaufspielfeld(self):
         # self.pos=0
@@ -1148,7 +1148,7 @@ def main():
         zuggestartet = False
         zugbeendet = False
 
-        playsound(amzug_sound[anderreihe], False)  # Spieler X ist am Zug Sound ab
+        playsound(amzug_sound[anderreihe], False,game.quiet)  # Spieler X ist am Zug Sound ab
         if spieler[game.aktspieler].ontour and not spieler[game.aktspieler].tanker:  # nur automatisch Urlaub weiterziehen, wenn keine Tanker unterwegs sind
             zuggestartet = True
             zugbeendet = False
@@ -1230,6 +1230,7 @@ def main():
                     if not xkeypressed:  # wenn P vorher nicht gedrückt war
                         xkeypressed = True  # Kenner setzen, dass p gedrückt ist
                         game.setmaxgeld(100000000)
+                        game.setquietmode()
                         playsound(mixer.Sound("Sounds/Mitteilungen/hundertmillionen.mp3"),False)
 
                 if not gedrueckt[K_x]:  # P nicht gedrückt

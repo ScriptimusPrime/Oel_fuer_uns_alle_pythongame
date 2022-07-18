@@ -13,10 +13,14 @@ class Game:
         self.rate = 1
         self.einfach = False
         self.maxgeld = 10000000
+        self.quiet = False
 
     def setmaxgeld(self,betrag):
         self.maxgeld = betrag
         print(f"Das Spielziel liegt jetzt bei {self.maxgeld} $")
+
+    def setquietmode(self):
+        self.quiet = True
 
     def changerate(self, newrate):
         self.rate = newrate

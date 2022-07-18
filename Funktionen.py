@@ -6,9 +6,11 @@ from time import *
 import sys
 
 
-def playsound(sound, klick):
-    sound.play()
-    sleep(sound.get_length())
+def playsound(sound, klick,quiet = False):
+    if not quiet:
+        sound.play()
+        sleep(sound.get_length())
+
     if klick:
         warteaufklick()
 
